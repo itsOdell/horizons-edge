@@ -1,18 +1,18 @@
 import connectToDB from "@/db/connect";
 import User from "@/models/User"
-
+import { formatDate } from "@/utils/date";
 
 export async function POST(req: Request): Promise<Response> {
     try {
         await connectToDB()
-        const current_date = new Date().toJSON().slice(0,10).replace(/-/g,'/'); //yy/mm/dd
+        const current_date = formatDate(new Date()); //yy/mm/dd
         const {license_key, mac_address} = await req.json()
     
         const user = await User.findOne({license_key});
 
         if (!user) {
             return new Response("This key doesn't exist", {status: 400})
-        }
+        } 
         if (!user.hwid_slots.includes(mac_address)) {
             return new Response("HWID doesn't match the registered HWID", {status: 401})
         }

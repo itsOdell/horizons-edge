@@ -1,5 +1,7 @@
 import connectToDB from "@/db/connect"
 import User from "@/models/User"
+import { addDays, formatDate } from "@/utils/date"
+import type { UserDocument } from "@/models/User"
 
 
 export async function POST(req: Request) {
@@ -12,11 +14,12 @@ export async function POST(req: Request) {
             hwid_slots: mac_address
         })
         if (!user) {
-            const user = new User({
+            const user: UserDocument = new User({
                 hwid_slots: [mac_address],
-                activated: false
+                activated: false,
             })
-            await user.save()
+            user!.expiry_date = formatDate(new Date(+new Date() + addDays(30)))
+            await user?.save()
         }
         return new Response("", {status: 200})
     } catch (error) {
