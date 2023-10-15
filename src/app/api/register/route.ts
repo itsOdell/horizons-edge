@@ -1,5 +1,6 @@
 import connectToDB from "@/db/connect"
 import User from "@/models/User"
+import { nanoid } from "nanoid"
 import { addDays, formatDate } from "@/utils/date"
 import type { UserDocument } from "@/models/User"
 
@@ -16,6 +17,7 @@ export async function POST(req: Request) {
         if (!user) {
             const user: UserDocument = new User({
                 hwid_slots: [mac_address],
+                license_key: nanoid(),
                 activated: false,
             })
             user!.expiry_date = formatDate(new Date(+new Date() + addDays(30)))
