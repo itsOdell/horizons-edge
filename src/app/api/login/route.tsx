@@ -13,7 +13,7 @@ export async function POST(req: Request): Promise<Response> {
         if (!user) {
             return new Response("This key doesn't exist", {status: 400})
         } 
-        if (!user.hwid_slots.includes(mac_address)) {
+        if (!user.hwid_slots.includes(mac_address) && !user.hwid_slots.includes("0000")) {
             return new Response("HWID doesn't match the registered HWID", {status: 401})
         }
         if (current_date > user.expiry_date) {
