@@ -3,7 +3,7 @@ import AdbotUser from "@/models/Adbot/User"
 import RevCheckerUser from "@/models/RevChecker/User"
 import { formatDate } from "@/utils/date";
 
-export async function POST(req: Request, {params}): Promise<Response> {
+export async function POST(req: Request, {params}: any): Promise<Response> {
     try {
         const {auth} = params;
         const User = auth == "adbot" ? AdbotUser : RevCheckerUser

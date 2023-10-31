@@ -6,7 +6,7 @@ import RevCheckerUser from "@/models/RevChecker/User"
 import type { UserDocument } from "@/models/User"
 
 
-export async function POST(req, {params}) {
+export async function POST(req: Request, {params}: any) {
     try {
         const {auth} = params;
         const User = auth === "adbot" ? AdbotUser : RevCheckerUser
