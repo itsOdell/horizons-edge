@@ -1,12 +1,15 @@
 import connectToDB from "@/db/connect"
-import User from "@/models/User"
 import { nanoid } from "nanoid"
 import { addDays, formatDate } from "@/utils/date"
+import AdbotUser from "@/models/Adbot/User"
+import RevCheckerUser from "@/models/RevChecker/User"
 import type { UserDocument } from "@/models/User"
 
 
-export async function POST(req: Request) {
+export async function POST(req, {params}) {
     try {
+        const {auth} = params;
+        const User = auth === "adbot" ? AdbotUser : RevCheckerUser
         await connectToDB()
         const {
             mac_address

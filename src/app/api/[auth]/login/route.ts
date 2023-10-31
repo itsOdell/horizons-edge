@@ -1,22 +1,27 @@
 import connectToDB from "@/db/connect";
-import User from "@/models/User"
+import AdbotUser from "@/models/Adbot/User"
+import RevCheckerUser from "@/models/RevChecker/User"
 import { formatDate } from "@/utils/date";
 
-export async function POST(req: Request): Promise<Response> {
+export async function POST(req: Request, {params}): Promise<Response> {
     try {
+        const {auth} = params;
+        const User = auth == "adbot" ? AdbotUser : RevCheckerUser
         await connectToDB()
         const current_date = formatDate(new Date()); //yy/mm/dd
         const {license_key, mac_address} = await req.json()
     
-        const user = await User.findOne({license_key});
-
+        
+        const user = await User.findOne({license_key: license_key});
+        
         if (!user) {
             return new Response("This key doesn't exist", {status: 400})
         } 
         if (!user.hwid_slots.includes(mac_address) && !user.hwid_slots.includes("0000")) {
             return new Response("HWID doesn't match the registered HWID", {status: 401})
         }
-        if (current_date > user.expiry_date) {
+        // console.log(new Date(current_date), new Date(user.expiry_date))
+        if (new Date(current_date) > new Date(user.expiry_date)) {
             return new Response("Key has expired", {status: 402})
         }
         if (!user.activated) {

@@ -10,6 +10,6 @@ export function formatDate(inputDate: Date | string) {
     return `${month}/${day}/${year}`;
 }
 
-
-console.log(formatDate(new Date(+new Date() + addDays(30))))
-console.log(formatDate(new Date()))
+// export function compareDates(date1: string, date2: string): number {
+//     date1 = date1.split("/") as string
+// }
