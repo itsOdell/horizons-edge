@@ -1,12 +1,13 @@
 import connectToDB from "@/db/connect";
-import AdbotUser from "@/models/Adbot/User"
-import RevCheckerUser from "@/models/RevChecker/User"
+import getModelFromPath from "@/utils/getModelFromPath";
 import { formatDate } from "@/utils/date";
+import type {Model} from "mongoose"
 
 export async function POST(req: Request, {params}: any): Promise<Response> {
     try {
         const {auth} = params;
-        const User = auth == "adbot" ? AdbotUser : RevCheckerUser
+        const User = getModelFromPath(auth) as Model<any, {}, {}, {}, any, any>
+        
         await connectToDB()
         const current_date = formatDate(new Date()); //yy/mm/dd
         const {license_key, mac_address} = await req.json()

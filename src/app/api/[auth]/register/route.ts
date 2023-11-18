@@ -1,15 +1,15 @@
 import connectToDB from "@/db/connect"
+import getModelFromPath from "@/utils/getModelFromPath"
 import { nanoid } from "nanoid"
 import { addDays, formatDate } from "@/utils/date"
-import AdbotUser from "@/models/Adbot/User"
-import RevCheckerUser from "@/models/RevChecker/User"
 import type { UserDocument } from "@/models/User"
+import type { Model } from "mongoose"
 
 
 export async function POST(req: Request, {params}: any) {
     try {
         const {auth} = params;
-        const User = auth === "adbot" ? AdbotUser : RevCheckerUser
+        const User = getModelFromPath(auth) as Model<any, {}, {}, {}, any, any>
         await connectToDB()
         const {
             mac_address

@@ -32,6 +32,9 @@ const UserSchema = new mongoose.Schema<IUser>({
     },
     activated: {
         type: Boolean
+    },
+    creation_date: {
+        type: Date
     }
 }, {timestamps: {
     createdAt: "creation_date"
